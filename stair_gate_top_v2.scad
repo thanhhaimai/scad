@@ -16,9 +16,9 @@ module main_hook(inner_r, outter_r, main_hook_h, main_hook_arm_h) {
         cube([thickness, inner_r + 1, main_hook_h + 2 * eps]);
     }
     translate([outter_r, outter_r, -eps])
-      cylinder(h=main_hook_h + 2 * eps, r=inner_r);
+      color("red") cylinder(h=main_hook_h + 2 * eps, r=inner_r);
     translate([thickness - eps, outter_r, -eps])
-      cube([outter_r + thickness, outter_r + eps, main_hook_h + 2 * eps]);
+      color("red") cube([outter_r + thickness, outter_r + eps, main_hook_h + 2 * eps]);
   }
 }
 
@@ -30,13 +30,20 @@ union() {
   latch_w = latch_gap_w + 2 * thickness;
   latch_d = latch_gap_d + 2 * thickness;
   latch_h = 30;
+
+  reinforce_r = 15;
+
   difference() {
-    cube([latch_w, latch_d, latch_h]);
+    union() {
+      cube([latch_w, latch_d, latch_h]);
+      translate([latch_d / 2 - thickness, latch_d / 2, 0])
+        cylinder(h=latch_h, r=reinforce_r);
+    }
     translate([thickness, thickness, -eps])
-      cube([latch_gap_w + thickness + eps, latch_gap_d, latch_h + 2 * eps]);
+      color("red") cube([latch_gap_w + thickness + eps, latch_gap_d, latch_h + 2 * eps]);
   }
 
-  arm_d = 35;
+  arm_d = 30;
   arm_x = 50;
   arm_y = -arm_d;
   translate([arm_x, arm_y, 0])
