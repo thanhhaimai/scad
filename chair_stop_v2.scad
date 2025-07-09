@@ -5,16 +5,33 @@ eps2 = eps * 2;
 $fa = 1.0;
 $fs = 0.1;
 
-gap_r = 7;
-outter_r = 20;
-gap_y = 2;
-latch_w = 0.5;
+// Height of the whole item
 item_h = 50;
 
+// Radius of the inner hole
+gap_r = 7;
+
+// Radius of the outter edge
+outter_r = 20;
+
+// Move the origin of both inner hole and outter cylinder in y direction
+gap_y = 2;
+
+// How much thinner is the gap compared to the inner hole
+// Increase to make the latch smaller
+latch_w = 0.5;
+
+// Radius for rounded edges
+round_r = 1; 
+
 difference() {
-  // Main
-  translate([0, gap_y + gap_r, 0])
-    cylinder(h=item_h, r=outter_r);
+  // Main - cylinder with rounded edges using minkowski
+  // NOTE: minkowski add 2 * round_r to the height
+  translate([0, gap_y + gap_r, round_r])
+    minkowski() {
+      cylinder(h=item_h - round_r * 2, r=outter_r - round_r);
+      sphere(r=round_r);
+    }
 
   // hole and cut
   union() {
